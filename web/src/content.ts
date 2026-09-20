@@ -16,7 +16,10 @@ export const steps: Record<CatId, StepCopy> = {
     heading: 'Киш редко встаёт с лежанки.',
     body: 'Но ради такого — встал. Выбирай день.',
   },
-  iriska: { heading: '', body: '' },
+  iriska: {
+    heading: 'Ириска перепробовала все варианты',
+    body: 'и ни один её не устроил. Попробуй ты.',
+  },
   chips: { heading: '', body: '' },
 };
 
@@ -44,4 +47,11 @@ export interface FormatOption {
   label: string;
 }
 
-export const formatOptions: FormatOption[] = [];
+export const formatOptions: FormatOption[] = [
+  { id: 'dinner', label: 'ужин' },
+  { id: 'movie', label: 'кино' },
+  { id: 'walk', label: 'прогулка' },
+  { id: 'masterclass', label: 'мастеркласс' },
+  { id: 'nature', label: 'выезд на природу' },
+  { id: 'cabin', label: 'выезд в домик' },
+];
