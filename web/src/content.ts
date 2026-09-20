@@ -12,7 +12,10 @@ export interface StepCopy {
 }
 
 export const steps: Record<CatId, StepCopy> = {
-  kish: { heading: '', body: '' },
+  kish: {
+    heading: 'Киш редко встаёт с лежанки.',
+    body: 'Но ради такого — встал. Выбирай день.',
+  },
   iriska: { heading: '', body: '' },
   chips: { heading: '', body: '' },
 };
@@ -22,7 +25,19 @@ export interface DateOption {
   label: string;
 }
 
-export const dateOptions: DateOption[] = [];
+export const dateOptions: DateOption[] = [
+  { id: 'feb-14', label: '14 февраля' },
+  { id: 'feb-23', label: '23 февраля' },
+  { id: 'mar-8', label: '8 марта' },
+];
+
+// Своя дата — обязательный четвёртый вариант, если ни один из
+// готовых не подходит. Кнопка открывает нативный <input type="date">.
+export const customDateCopy = {
+  cardLabel: 'Указать самой',
+  inputLabel: 'Своя дата',
+  submit: 'Выбрать',
+};
 
 export interface FormatOption {
   id: string;
