@@ -13,6 +13,9 @@ const STORAGE_KEY = 'valentine:state';
 interface AppState {
   step: CatId;
   date?: string;
+  // ISO-дата (YYYY-MM-DD), которую понимает <input type="date">.
+  // Нужна только для .ics на шаге Чипса — на карточках дат года нет.
+  dateISO?: string;
   format?: string;
 }
 
@@ -56,8 +59,8 @@ export function goTo(step: CatId): void {
   renderCurrentStep();
 }
 
-export function selectDate(date: string): void {
-  state = { ...state, date };
+export function selectDate(date: string, dateISO?: string): void {
+  state = { ...state, date, dateISO };
   persist();
   goTo('iriska');
 }

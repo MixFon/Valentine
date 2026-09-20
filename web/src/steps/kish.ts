@@ -32,7 +32,9 @@ export function render(container: HTMLElement): void {
     button.className = 'kish__date';
     button.textContent = option.label;
     button.style.setProperty('--breathe-delay', `${index * 0.6}s`);
-    button.addEventListener('click', () => selectDate(option.label));
+    button.addEventListener('click', () =>
+      selectDate(option.label, resolveNextOccurrence(option.day, option.month)),
+    );
     list.append(button);
   });
 
@@ -85,7 +87,7 @@ function renderCustomDate(delayIndex: number): HTMLElement {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     if (!input.value) return;
-    selectDate(formatCustomDate(input.value));
+    selectDate(formatCustomDate(input.value), input.value);
   });
 
   form.append(label, input, submit);
@@ -96,4 +98,21 @@ function renderCustomDate(delayIndex: number): HTMLElement {
 function formatCustomDate(isoDate: string): string {
   const date = new Date(`${isoDate}T00:00:00`);
   return new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long' }).format(date);
+}
+
+// Готовые карточки не показывают год, но для .ics он нужен: берём
+// ближайшее будущее наступление этого дня и месяца (сегодня считается
+// подходящим днём).
+function resolveNextOccurrence(day: number, month: number): string {
+  const today = new Date();
+  const todayUTC = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+
+  let year = today.getFullYear();
+  let candidateUTC = Date.UTC(year, month - 1, day);
+  if (candidateUTC < todayUTC) {
+    year += 1;
+    candidateUTC = Date.UTC(year, month - 1, day);
+  }
+
+  return new Date(candidateUTC).toISOString().slice(0, 10);
 }
