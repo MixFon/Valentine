@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # TODO: заполнить перед первым деплоем реальными значениями VPS.
-HOST="TODO.example.com"
-SSH_PORT=22222
-SSH_USER="deploy"
+HOST="mrmixfon.ru"
+SSH_PORT=24789
+SSH_USER="root"
 REMOTE_DIR="/opt/valentine"
 
 BIN="bin/valentine"
