@@ -71,3 +71,8 @@ export const chipsCopy = {
   confirmedBody: 'Значит, договорились.',
   calendarButton: 'Добавить в календарь',
 };
+
+export const audioCopy = {
+  muteLabel: 'Выключить звук',
+  unmuteLabel: 'Включить звук',
+};

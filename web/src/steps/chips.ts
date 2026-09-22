@@ -6,6 +6,7 @@
 
 import { steps, chipsCopy } from '../content';
 import { getState } from '../state';
+import { play } from '../audio';
 import './chips.css';
 
 export function render(container: HTMLElement): void {
@@ -61,6 +62,7 @@ function renderPending(
     })
       .then((response) => {
         if (!response.ok) throw new Error(`unexpected status ${response.status}`);
+        play('chips');
         renderConfirmed(section, dateISO, format);
       })
       .catch(() => {

@@ -7,6 +7,7 @@
 
 import { steps, formatOptions, type FormatOption } from '../content';
 import { selectFormat } from '../state';
+import { play } from '../audio';
 import './iriska.css';
 
 const ACCENT_VARS = ['--accent', '--accent-2', '--accent-3'];
@@ -79,6 +80,7 @@ function createCard(option: FormatOption, index: number): HTMLButtonElement {
 
   button.addEventListener('click', () => {
     if (dodged) {
+      play('iriska');
       selectFormat(option.label);
     } else {
       dodge();
