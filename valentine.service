@@ -1,0 +1,19 @@
+[Unit]
+Description=Valentine invitation site
+After=network.target
+
+[Service]
+Type=simple
+User=valentine
+WorkingDirectory=/opt/valentine
+ExecStart=/opt/valentine/valentine
+EnvironmentFile=/opt/valentine/.env
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/opt/valentine/data
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

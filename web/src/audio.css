@@ -1,0 +1,40 @@
+.mute-toggle {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 1rem);
+  right: calc(env(safe-area-inset-right, 0px) + 1rem);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color var(--dur-slow), color var(--dur-slow);
+}
+
+.mute-toggle svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.mute-toggle__waves,
+.mute-toggle__slash {
+  transition: opacity var(--dur-fast);
+}
+
+.mute-toggle__slash {
+  opacity: 0;
+}
+
+.mute-toggle[aria-pressed='true'] .mute-toggle__waves {
+  opacity: 0;
+}
+
+.mute-toggle[aria-pressed='true'] .mute-toggle__slash {
+  opacity: 1;
+}

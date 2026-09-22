@@ -1,0 +1,15 @@
+# Go
+/bin/
+/cmd/valentine/dist/*
+!/cmd/valentine/dist/.gitkeep
+
+# Frontend
+/web/node_modules/
+/web/dist/
+
+# Данные и секреты
+/data/*.json
+.env
+
+# ОС
+.DS_Store

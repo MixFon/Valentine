@@ -1,0 +1,40 @@
+/*
+ * Единственное место с hex-цветами, радиусами и длительностями.
+ * Значения ниже — стартовые, выведены из описаний котов в CLAUDE.md,
+ * а не из фотографий. Пересчитать по assets/img/, когда там появятся
+ * реальные снимки (см. DECISIONS.md, раздел "Открыто").
+ */
+
+:root {
+  --dur-fast: 180ms;
+  --dur-slow: 700ms;
+}
+
+[data-cat='kish'] {
+  --bg: #100e0c;
+  --surface: #231f1c;
+  --ink: #f0eae0;
+  --accent: #d9a441;
+  --radius: 4px;
+  --dur: var(--dur-slow);
+}
+
+[data-cat='iriska'] {
+  --bg: #f2e7e0;
+  --surface: #ffffff;
+  --ink: #2e2724;
+  --accent: #c4531f;
+  --accent-2: #e8a26b;
+  --accent-3: #3a302b;
+  --radius: 10px;
+  --dur: var(--dur-fast);
+}
+
+[data-cat='chips'] {
+  --bg: #fff7f0;
+  --surface: #ffffff;
+  --ink: #4a3529;
+  --accent: #f08a3c;
+  --radius: 28px;
+  --dur: 400ms;
+}
