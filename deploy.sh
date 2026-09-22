@@ -3,7 +3,7 @@ set -euo pipefail
 
 # TODO: заполнить перед первым деплоем реальными значениями VPS.
 HOST="mrmixfon.ru"
-SSH_PORT=24789
+SSH_PORT=22
 SSH_USER="root"
 REMOTE_DIR="/opt/valentine"
 

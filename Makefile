@@ -5,9 +5,9 @@ dev: ## vite dev server + go run, hot reload фронта
 	go run ./cmd/valentine & \
 	npm --prefix web run dev
 
-build: ## vite build -> web/dist, затем go build -o bin/valentine
+build: ## vite build -> web/dist, затем go build -o bin/valentine (кросс-компиляция под Linux x86_64 VPS)
 	npm --prefix web run build
-	go build -o bin/valentine ./cmd/valentine
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o bin/valentine ./cmd/valentine
 	@touch cmd/valentine/dist/.gitkeep # vite emptyOutDir выметает плейсхолдер, нужен для чистого клона без сборки фронта
 
 deploy: build ## build + scp на VPS + systemctl restart valentine
