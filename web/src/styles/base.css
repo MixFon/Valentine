@@ -1,8 +1,24 @@
 /*
- * Локальные шрифты подключаются здесь через @font-face, когда в
- * assets/fonts/ появятся woff2-файлы Unbounded/Cormorant Infant и Golos Text.
- * До этого — системный fallback, чтобы не фабриковать несуществующие ассеты.
+ * Локальные шрифты: по одному начертанию на гарнитуру, кириллица + латиница.
+ * Golos Text 400 — текст и кнопки, Unbounded 600 — заголовки.
+ * Для этих же файлов в index.html стоит preload.
  */
+
+@font-face {
+  font-family: 'Golos Text';
+  src: url('../../assets/fonts/golos-text-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Unbounded';
+  src: url('../../assets/fonts/unbounded-600.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
 
 *,
 *::before,
