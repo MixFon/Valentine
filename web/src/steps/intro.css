@@ -1,0 +1,54 @@
+.intro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+  min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  padding: 2rem 1.25rem;
+}
+
+/* Коты стоят на одной линии, как на полу. Размер пикселя целый,
+   чтобы края оставались чёткими на любом экране. */
+.intro__cats {
+  --px: 3px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* 4px влезает в ряд начиная с iPhone 14/15 (390px): 324px котов + зазоры. */
+@media (min-width: 380px) {
+  .intro__cats {
+    --px: 4px;
+    gap: 0.5rem;
+  }
+}
+
+.intro__heading {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.3;
+}
+
+.intro__body {
+  margin: 0;
+  max-width: 36ch;
+  line-height: 1.5;
+}
+
+.intro__start {
+  align-self: flex-start;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--surface);
+  font: inherit;
+  cursor: pointer;
+}
+
+.intro__start:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}

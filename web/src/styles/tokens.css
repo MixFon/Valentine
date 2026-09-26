@@ -8,6 +8,39 @@
 :root {
   --dur-fast: 180ms;
   --dur-slow: 700ms;
+
+  /* Цвета пиксельных котов — общие для всех экранов. */
+  --px-line: #2b1d15;
+  --px-ear: #e7a7a2;
+  --px-nose: #d98a8a;
+  --px-pupil: #1e140e;
+  --px-bed: #cdbba6;
+  --px-kish-fur: #3a271c;
+  --px-kish-sheen: #5c3b26;
+  --px-kish-shadow: #1e140e;
+  --px-kish-eye: #c8c24a;
+  --px-iriska-black: #2a201b;
+  --px-iriska-red: #b8612a;
+  --px-iriska-cream: #e6b47c;
+  --px-iriska-eye: #9bb04a;
+  --px-chips-ginger: #e08a3c;
+  --px-chips-white: #fffbf5;
+  --px-chips-eye: #e0a030;
+  --px-zzz: #8c7a6a;
+  --px-hand: #efc7a8;
+  --px-hand-fold: #c99a7a;
+  --px-heart: #d9534a;
+}
+
+/* Стартовый экран: нейтральный тёплый фон, на котором одинаково
+   читаются все три пиксельных кота. */
+[data-cat='intro'] {
+  --bg: #f7eee4;
+  --surface: #ffffff;
+  --ink: #3a2c24;
+  --accent: #a4521f;
+  --radius: 16px;
+  --dur: 400ms;
 }
 
 [data-cat='kish'] {
@@ -17,6 +50,11 @@
   --accent: #d9a441;
   --radius: 4px;
   --dur: var(--dur-slow);
+
+  /* Чёрный кот на почти чёрном фоне пропадает: контур спрайта —
+     тёплая подсветка шерсти, лежанка приглушена. */
+  --px-line: #7a5a42;
+  --px-bed: #5e5247;
 }
 
 [data-cat='iriska'] {
@@ -37,4 +75,16 @@
   --accent: #f08a3c;
   --radius: 28px;
   --dur: 400ms;
+}
+
+/* Титры — тёмный «киношный» экран после подтверждения. */
+[data-cat='credits'] {
+  --bg: #0e0c0b;
+  --surface: #1c1917;
+  --ink: #f2ece4;
+  --accent: #d9a441;
+  --radius: 12px;
+  --dur: var(--dur-slow);
+
+  --px-line: #7a5a42;
 }

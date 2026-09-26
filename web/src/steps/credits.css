@@ -1,0 +1,105 @@
+/* overflow: clip срезает только ту часть, что во время проезда торчит
+   ниже контента, — страница не получает лишней прокрутки. */
+.credits {
+  min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  padding: 3rem 1.25rem;
+  overflow: clip;
+}
+
+.credits__roll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  text-align: center;
+  animation: credits-roll 10s cubic-bezier(0.2, 0.4, 0.3, 1) both;
+}
+
+@keyframes credits-roll {
+  from {
+    transform: translateY(100dvh);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .credits__roll {
+    animation: none;
+  }
+}
+
+/* Отступы с обеих сторон: справа над заголовком кружок звука,
+   а текст по центру. */
+.credits__heading {
+  margin: 0;
+  padding-inline: 3rem;
+  font-size: 1.25rem;
+  line-height: 1.3;
+}
+
+.credits__cast {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+}
+
+.credits__pair {
+  --px: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+}
+
+.credits__photo {
+  display: block;
+  flex: none;
+  width: 8rem;
+}
+
+.credits__photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+
+.credits__caption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.credits__name {
+  font-family: 'Unbounded', serif;
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.credits__role {
+  max-width: 28ch;
+}
+
+.credits__final {
+  margin: 0;
+  max-width: 28ch;
+}
+
+.credits__back {
+  padding: 1rem 1.5rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.credits__back:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}

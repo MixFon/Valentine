@@ -1,20 +1,16 @@
 // Шаг 1 — выбор даты.
 
-import { steps, dateOptions, customDateCopy } from '../content';
+import { steps, dateOptions, customDateCopy, kishCopy } from '../content';
 import { selectDate } from '../state';
-import { renderPhoto } from '../photos';
+import { renderPixelCat } from '../pixelcats';
+import { play } from '../audio';
 import './kish.css';
 
 export function render(container: HTMLElement): void {
   const section = document.createElement('section');
   section.className = 'kish';
 
-  section.append(renderPhoto('kish', 'kish__photo'));
-
-  const step = document.createElement('p');
-  step.className = 'kish__step';
-  step.textContent = '1';
-  section.append(step);
+  section.append(renderSleepingKish());
 
   const heading = document.createElement('h1');
   heading.className = 'kish__heading';
@@ -45,6 +41,25 @@ export function render(container: HTMLElement): void {
 
   section.append(list);
   container.append(section);
+}
+
+// Пасхалка: Киш спит клубком, тап будит его — поднимает голову,
+// кряхтит и засыпает обратно. Это кнопка, чтобы разбудить можно было
+// и с клавиатуры.
+function renderSleepingKish(): HTMLButtonElement {
+  const cat = renderPixelCat('kishSleep');
+
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'kish__cat';
+  button.setAttribute('aria-label', kishCopy.wakeLabel);
+  button.append(cat.el);
+  button.addEventListener('click', () => {
+    cat.react('wake');
+    play('kish');
+  });
+
+  return button;
 }
 
 function renderCustomDate(delayIndex: number): HTMLElement {

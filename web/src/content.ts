@@ -26,6 +26,14 @@ export const steps: Record<CatId, StepCopy> = {
   },
 };
 
+// Стартовый экран — до трёх шагов.
+export const introCopy = {
+  heading: 'Тебя зовут на свидание.',
+  body: 'Три кота всё подготовили и зададут по вопросу: Киш — про день, Ириска — про формат, Чипс проверит, что всё сходится. Это пара минут.',
+  start: 'Выбрать день',
+  catsLabel: 'Киш, Ириска и Чипс',
+};
+
 export interface DateOption {
   id: string;
   label: string;
@@ -70,6 +78,24 @@ export const chipsCopy = {
   confirmedHeading: 'Чипс уже сел на руки и никого не отпускает.',
   confirmedBody: 'Значит, договорились.',
   calendarButton: 'Добавить в календарь',
+  creditsButton: 'В разработке участвовали',
+};
+
+// Пасхалка на экране Киша: тап по спящему коту будит его.
+export const kishCopy = {
+  wakeLabel: 'Разбудить Киша',
+};
+
+// Титры после подтверждения — как после фильма.
+export const creditsCopy = {
+  heading: 'В разработке участвовали',
+  cast: {
+    kish: { name: 'Киш', role: 'в роли того, кто встал с лежанки' },
+    iriska: { name: 'Ириска', role: 'в роли той, кого ничего не устроило' },
+    chips: { name: 'Чипс', role: 'в роли того, кто всё скрепил' },
+  } satisfies Record<CatId, { name: string; role: string }>,
+  final: 'Спасибо, что досмотрела.',
+  back: 'Вернуться к билету',
 };
 
 // Черновики — автор может переписать.

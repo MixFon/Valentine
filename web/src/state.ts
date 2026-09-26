@@ -1,32 +1,44 @@
 // Единственное место, где живёт состояние приглашения и переходы
-// между тремя шагами. Экраны не переключают себя сами — они сообщают
-// сюда, что выбрано, а дальше уже решает эта машина состояний.
+// между стартовым экраном и тремя шагами. Экраны не переключают себя
+// сами — они сообщают сюда, что выбрано, а дальше уже решает эта
+// машина состояний.
 
 import type { CatId } from './content';
+import { render as renderIntro } from './steps/intro';
 import { render as renderKish } from './steps/kish';
 import { render as renderIriska } from './steps/iriska';
 import { render as renderChips } from './steps/chips';
+import { render as renderCredits } from './steps/credits';
 import { preload } from './photos';
 
-const STEPS: CatId[] = ['kish', 'iriska', 'chips'];
+// Старт и титры — не коты: у них нет своего звука и своей палитры кота.
+type Step = 'intro' | CatId | 'credits';
+
+const STEPS: Step[] = ['intro', 'kish', 'iriska', 'chips', 'credits'];
+const CATS: CatId[] = ['kish', 'iriska', 'chips'];
 const STORAGE_KEY = 'valentine:state';
 
 interface AppState {
-  step: CatId;
+  step: Step;
   date?: string;
   // ISO-дата (YYYY-MM-DD), которую понимает <input type="date">.
   // Нужна только для .ics на шаге Чипса — на карточках дат года нет.
   dateISO?: string;
   format?: string;
+  // Ответ уже ушёл на сервер — экран Чипса сразу показывает итог,
+  // а не кнопку отправки: иначе после титров ответ можно отправить дважды.
+  confirmed?: boolean;
 }
 
-const renderers: Record<CatId, (container: HTMLElement) => void> = {
+const renderers: Record<Step, (container: HTMLElement) => void> = {
+  intro: renderIntro,
   kish: renderKish,
   iriska: renderIriska,
   chips: renderChips,
+  credits: renderCredits,
 };
 
-let state: AppState = readStored() ?? { step: 'kish' };
+let state: AppState = readStored() ?? { step: 'intro' };
 
 function readStored(): AppState | null {
   const raw = sessionStorage.getItem(STORAGE_KEY);
@@ -52,12 +64,14 @@ function renderCurrentStep(): void {
 
   app.replaceChildren();
   renderers[state.step](app);
+  // Новый экран всегда с начала: титрам важно проехать с самого верха.
+  window.scrollTo(0, 0);
 
-  const next = STEPS[STEPS.indexOf(state.step) + 1];
-  if (next) preload(next);
+  // Фото котов живут только в титрах — грузим их, пока открыт Чипс.
+  if (STEPS[STEPS.indexOf(state.step) + 1] === 'credits') CATS.forEach(preload);
 }
 
-export function goTo(step: CatId): void {
+export function goTo(step: Step): void {
   state = { ...state, step };
   persist();
   renderCurrentStep();
@@ -73,6 +87,11 @@ export function selectFormat(format: string): void {
   state = { ...state, format };
   persist();
   goTo('chips');
+}
+
+export function markConfirmed(): void {
+  state = { ...state, confirmed: true };
+  persist();
 }
 
 export function getState(): Readonly<AppState> {

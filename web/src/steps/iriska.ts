@@ -8,7 +8,7 @@
 import { steps, formatOptions, type FormatOption } from '../content';
 import { selectFormat } from '../state';
 import { play } from '../audio';
-import { renderPhoto } from '../photos';
+import { renderPixelCat, type PixelCat } from '../pixelcats';
 import './iriska.css';
 
 const ACCENT_VARS = ['--accent', '--accent-2', '--accent-3'];
@@ -17,17 +17,13 @@ export function render(container: HTMLElement): void {
   const section = document.createElement('section');
   section.className = 'iriska';
 
-  const step = document.createElement('p');
-  step.className = 'iriska__step';
-  step.textContent = '2';
-
   const heading = document.createElement('h1');
   heading.className = 'iriska__heading';
   heading.textContent = steps.iriska.heading;
 
-  // Подзаголовок слева, фото справа: рядом с заголовком длинные слова
-  // не помещаются, а сверху справа живёт тумблер звука. Так фото почти
-  // не добавляет высоты экрану, где и без него шесть карточек.
+  // Подзаголовок слева, Ириска справа: рядом с заголовком длинные слова
+  // не помещаются, а сверху справа живёт тумблер звука. Так кошка почти
+  // не добавляет высоты экрану, где и без неё шесть карточек.
   const intro = document.createElement('div');
   intro.className = 'iriska__intro';
 
@@ -35,24 +31,24 @@ export function render(container: HTMLElement): void {
   body.className = 'iriska__body';
   body.textContent = steps.iriska.body;
 
-  const photo = renderPhoto('iriska', 'iriska__photo');
-  photo.style.setProperty('--tilt', `${(Math.random() * 3 - 1.5).toFixed(2)}deg`);
+  const cat = renderPixelCat('iriskaCrouch');
+  cat.el.classList.add('iriska__cat');
 
-  intro.append(body, photo);
-  section.append(step, heading, intro);
+  intro.append(body, cat.el);
+  section.append(heading, intro);
 
   const list = document.createElement('div');
   list.className = 'iriska__cards';
 
   formatOptions.forEach((option, index) => {
-    list.append(createCard(option, index));
+    list.append(createCard(option, index, cat));
   });
 
   section.append(list);
   container.append(section);
 }
 
-function createCard(option: FormatOption, index: number): HTMLButtonElement {
+function createCard(option: FormatOption, index: number, cat: PixelCat): HTMLButtonElement {
   const prefersReducedMotion = window.matchMedia(
     '(prefers-reduced-motion: reduce)',
   ).matches;
@@ -82,6 +78,8 @@ function createCard(option: FormatOption, index: number): HTMLButtonElement {
     button.style.setProperty('--dodge-y', `${dy}px`);
     button.style.setProperty('--dodge-rot', `${rot}deg`);
     button.classList.add('iriska__card--dodged');
+    // Карточка шарахнулась — кошка-тревожа вздрагивает вместе с ней.
+    cat.react('startle');
   }
 
   if (supportsHover && !prefersReducedMotion) {

@@ -2,12 +2,14 @@
 //
 // Билет с волнистым краем (рифленое ушко Чипса) показывает выбранные
 // дату и формат. Кнопка отправляет POST /api/rsvp; после успеха —
-// подтверждение и .ics, собранный на клиенте из dateISO.
+// подтверждение, .ics, собранный на клиенте из dateISO, и кнопка титров.
+// Факт отправки запоминается в state: вернувшись из титров, попадаешь
+// сразу на итог, а не на повторную отправку.
 
 import { steps, chipsCopy } from '../content';
-import { getState } from '../state';
+import { getState, goTo, markConfirmed } from '../state';
 import { play } from '../audio';
-import { renderPhoto } from '../photos';
+import { renderPixelCat } from '../pixelcats';
 import './chips.css';
 
 export function render(container: HTMLElement): void {
@@ -16,7 +18,11 @@ export function render(container: HTMLElement): void {
   section.className = 'chips';
 
   container.append(section);
-  renderPending(section, state.date, state.dateISO, state.format);
+  if (state.confirmed) {
+    renderConfirmed(section, state.dateISO, state.format);
+  } else {
+    renderPending(section, state.date, state.dateISO, state.format);
+  }
 }
 
 function renderPending(
@@ -26,10 +32,6 @@ function renderPending(
   format: string | undefined,
 ): void {
   section.replaceChildren();
-
-  const step = document.createElement('p');
-  step.className = 'chips__step';
-  step.textContent = '3';
 
   const heading = document.createElement('h1');
   heading.className = 'chips__heading';
@@ -63,6 +65,7 @@ function renderPending(
     })
       .then((response) => {
         if (!response.ok) throw new Error(`unexpected status ${response.status}`);
+        markConfirmed();
         play('chips');
         renderConfirmed(section, dateISO, format);
       })
@@ -73,9 +76,10 @@ function renderPending(
       });
   });
 
-  const photo = renderPhoto('chips', 'chips__photo');
+  const cat = renderPixelCat('chipsHands');
+  cat.el.classList.add('chips__cat');
 
-  section.append(step, heading, body, photo, ticket, error, confirm);
+  section.append(heading, body, cat.el, ticket, error, confirm);
 }
 
 function renderConfirmed(
@@ -93,7 +97,11 @@ function renderConfirmed(
   body.className = 'chips__body';
   body.textContent = chipsCopy.confirmedBody;
 
-  section.append(heading, body);
+  // Договорились — над Чипсом появляется сердечко.
+  const cat = renderPixelCat('chipsHands', 'happy');
+  cat.el.classList.add('chips__cat');
+
+  section.append(heading, body, cat.el);
 
   if (dateISO) {
     const calendar = document.createElement('a');
@@ -103,6 +111,13 @@ function renderConfirmed(
     calendar.download = 'valentine.ics';
     section.append(calendar);
   }
+
+  const credits = document.createElement('button');
+  credits.type = 'button';
+  credits.className = 'chips__credits';
+  credits.textContent = chipsCopy.creditsButton;
+  credits.addEventListener('click', () => goTo('credits'));
+  section.append(credits);
 }
 
 function buildTicket(date: string | undefined, format: string | undefined): HTMLElement {

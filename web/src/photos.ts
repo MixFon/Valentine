@@ -1,4 +1,5 @@
-// Фото котов: <picture> с webp и jpg-fallback, два размера на кадр.
+// Фото котов для титров: <picture> с webp и jpg-fallback, два размера
+// на кадр.
 // Кадры нарезаны заранее из оригиналов в assets/img/ (см. DECISIONS.md),
 // оригиналы в бандл не попадают.
 //
@@ -19,20 +20,22 @@ interface Photo {
   sizes: string;
 }
 
+// Все кадры квадратные и одного размера: в титрах они стоят столбиком,
+// разные пропорции рвали бы ритм.
 const PHOTOS: Record<CatId, Photo> = {
   kish: {
     webp: srcset(
-      new URL('../assets/img/kish-800.webp', import.meta.url).href, 800,
-      new URL('../assets/img/kish-1200.webp', import.meta.url).href, 1200,
+      new URL('../assets/img/kish-240.webp', import.meta.url).href, 240,
+      new URL('../assets/img/kish-480.webp', import.meta.url).href, 480,
     ),
     jpg: srcset(
-      new URL('../assets/img/kish-800.jpg', import.meta.url).href, 800,
-      new URL('../assets/img/kish-1200.jpg', import.meta.url).href, 1200,
+      new URL('../assets/img/kish-240.jpg', import.meta.url).href, 240,
+      new URL('../assets/img/kish-480.jpg', import.meta.url).href, 480,
     ),
-    fallback: new URL('../assets/img/kish-800.jpg', import.meta.url).href,
-    width: 1200,
-    height: 600,
-    sizes: 'min(100vw - 2.5rem, 70ch)',
+    fallback: new URL('../assets/img/kish-240.jpg', import.meta.url).href,
+    width: 480,
+    height: 480,
+    sizes: '8rem',
   },
   iriska: {
     webp: srcset(
@@ -46,21 +49,21 @@ const PHOTOS: Record<CatId, Photo> = {
     fallback: new URL('../assets/img/iriska-240.jpg', import.meta.url).href,
     width: 480,
     height: 480,
-    sizes: '6rem',
+    sizes: '8rem',
   },
   chips: {
     webp: srcset(
-      new URL('../assets/img/chips-400.webp', import.meta.url).href, 400,
-      new URL('../assets/img/chips-800.webp', import.meta.url).href, 800,
+      new URL('../assets/img/chips-240.webp', import.meta.url).href, 240,
+      new URL('../assets/img/chips-480.webp', import.meta.url).href, 480,
     ),
     jpg: srcset(
-      new URL('../assets/img/chips-400.jpg', import.meta.url).href, 400,
-      new URL('../assets/img/chips-800.jpg', import.meta.url).href, 800,
+      new URL('../assets/img/chips-240.jpg', import.meta.url).href, 240,
+      new URL('../assets/img/chips-480.jpg', import.meta.url).href, 480,
     ),
-    fallback: new URL('../assets/img/chips-400.jpg', import.meta.url).href,
-    width: 800,
-    height: 1000,
-    sizes: '9rem',
+    fallback: new URL('../assets/img/chips-240.jpg', import.meta.url).href,
+    width: 480,
+    height: 480,
+    sizes: '8rem',
   },
 };
 
@@ -91,8 +94,6 @@ export function renderPhoto(cat: CatId, className: string): HTMLPictureElement {
   img.height = photo.height;
   img.alt = photoAlt[cat];
   img.decoding = 'async';
-  // Первый экран — Киш, его фото нужно как можно раньше.
-  if (cat === 'kish') img.fetchPriority = 'high';
 
   return picture;
 }

@@ -1,0 +1,28 @@
+/* Размер пикселя задаёт контейнер через --px (целое число пикселей,
+   чтобы края не мылились). */
+.pixelcat {
+  display: block;
+  width: calc(var(--px-w) * var(--px, 3px));
+  height: calc(var(--px-h) * var(--px, 3px));
+}
+
+.px-L { fill: var(--px-line); }
+.px-I { fill: var(--px-ear); }
+.px-N { fill: var(--px-nose); }
+.px-P { fill: var(--px-pupil); }
+.px-b { fill: var(--px-bed); }
+.px-K { fill: var(--px-kish-fur); }
+.px-k { fill: var(--px-kish-sheen); }
+.px-d { fill: var(--px-kish-shadow); }
+.px-y { fill: var(--px-kish-eye); }
+.px-Z { fill: var(--px-zzz); }
+.px-B { fill: var(--px-iriska-black); }
+.px-R { fill: var(--px-iriska-red); }
+.px-C { fill: var(--px-iriska-cream); }
+.px-g { fill: var(--px-iriska-eye); }
+.px-O { fill: var(--px-chips-ginger); }
+.px-W { fill: var(--px-chips-white); }
+.px-a { fill: var(--px-chips-eye); }
+.px-H { fill: var(--px-hand); }
+.px-h { fill: var(--px-hand-fold); }
+.px-Q { fill: var(--px-heart); }
