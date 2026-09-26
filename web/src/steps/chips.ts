@@ -6,8 +6,9 @@
 // Факт отправки запоминается в state: вернувшись из титров, попадаешь
 // сразу на итог, а не на повторную отправку.
 
-import { steps, chipsCopy } from '../content';
-import { getState, goTo, markConfirmed } from '../state';
+import { steps, chipsCopy, backCopy } from '../content';
+import { getState, goTo, markConfirmed, unconfirm } from '../state';
+import { renderBackButton } from '../back';
 import { play } from '../audio';
 import { renderPixelCat } from '../pixelcats';
 import './chips.css';
@@ -79,7 +80,7 @@ function renderPending(
   const cat = renderPixelCat('chipsHands');
   cat.el.classList.add('chips__cat');
 
-  section.append(heading, body, cat.el, ticket, error, confirm);
+  section.append(renderBackButton(backCopy.chips), heading, body, cat.el, ticket, error, confirm);
 }
 
 function renderConfirmed(
@@ -117,7 +118,18 @@ function renderConfirmed(
   credits.className = 'chips__credits';
   credits.textContent = chipsCopy.creditsButton;
   credits.addEventListener('click', () => goTo('credits'));
-  section.append(credits);
+
+  const change = document.createElement('button');
+  change.type = 'button';
+  change.className = 'chips__change';
+  change.textContent = chipsCopy.changeAnswer;
+  change.addEventListener('click', () => {
+    unconfirm();
+    const state = getState();
+    renderPending(section, state.date, state.dateISO, state.format);
+  });
+
+  section.append(credits, change);
 }
 
 function buildTicket(date: string | undefined, format: string | undefined): HTMLElement {

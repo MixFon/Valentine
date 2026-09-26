@@ -107,6 +107,19 @@
   cursor: pointer;
 }
 
+.chips__change {
+  align-self: center;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: none;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
 .chips__confirm:disabled {
   opacity: 0.6;
   cursor: default;

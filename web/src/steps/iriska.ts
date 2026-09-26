@@ -2,11 +2,14 @@
 //
 // Механика: первое наведение (hover-устройства) или тап (touch)
 // уводит карточку в сторону — "шарахается". Повторный тап по уже
-// увёдшей карточке — выбор, отдаётся в руки. При prefers-reduced-motion
-// фаза "шарахания" пропускается: первый тап сразу выбирает.
+// увёдшей карточке — выбор, отдаётся в руки. Отскочившей может быть
+// только одна: шарахнулась другая — прежняя возвращается на место.
+// При prefers-reduced-motion фаза "шарахания" пропускается: первый тап
+// сразу выбирает.
 
-import { steps, formatOptions, type FormatOption } from '../content';
-import { selectFormat } from '../state';
+import { steps, formatOptions, backCopy, type FormatOption } from '../content';
+import { getState, selectFormat } from '../state';
+import { renderBackButton } from '../back';
 import { play } from '../audio';
 import { renderPixelCat, type PixelCat } from '../pixelcats';
 import './iriska.css';
@@ -35,20 +38,35 @@ export function render(container: HTMLElement): void {
   cat.el.classList.add('iriska__cat');
 
   intro.append(body, cat.el);
-  section.append(heading, intro);
+  section.append(renderBackButton(backCopy.iriska), heading, intro);
 
   const list = document.createElement('div');
   list.className = 'iriska__cards';
 
+  // В каждый момент отскочившей может быть только одна карточка:
+  // шарахнулась другая — предыдущая возвращается на место.
+  const deck: Deck = { dodged: null, cat, current: getState().format };
+
   formatOptions.forEach((option, index) => {
-    list.append(createCard(option, index, cat));
+    list.append(createCard(option, index, deck));
   });
 
   section.append(list);
   container.append(section);
 }
 
-function createCard(option: FormatOption, index: number, cat: PixelCat): HTMLButtonElement {
+interface Card {
+  settle(): void;
+}
+
+interface Deck {
+  dodged: Card | null;
+  cat: PixelCat;
+  // Формат, выбранный раньше, — если вернулись с экрана Чипса.
+  current: string | undefined;
+}
+
+function createCard(option: FormatOption, index: number, deck: Deck): HTMLButtonElement {
   const prefersReducedMotion = window.matchMedia(
     '(prefers-reduced-motion: reduce)',
   ).matches;
@@ -63,12 +81,25 @@ function createCard(option: FormatOption, index: number, cat: PixelCat): HTMLBut
     `var(${ACCENT_VARS[index % ACCENT_VARS.length]})`,
   );
   button.style.setProperty('--tilt', `${(Math.random() * 3 - 1.5).toFixed(2)}deg`);
+  if (option.label === deck.current) {
+    button.classList.add('iriska__card--current');
+    button.setAttribute('aria-current', 'true');
+  }
 
-  let dodged = prefersReducedMotion;
+  let dodged = false;
+
+  const card: Card = {
+    settle() {
+      dodged = false;
+      button.classList.remove('iriska__card--dodged');
+    },
+  };
 
   function dodge(): void {
     if (dodged) return;
+    if (deck.dodged && deck.dodged !== card) deck.dodged.settle();
     dodged = true;
+    deck.dodged = card;
 
     const dx = Math.round(Math.random() * 120 - 60);
     const dy = Math.round(Math.random() * 40 - 20);
@@ -79,7 +110,7 @@ function createCard(option: FormatOption, index: number, cat: PixelCat): HTMLBut
     button.style.setProperty('--dodge-rot', `${rot}deg`);
     button.classList.add('iriska__card--dodged');
     // Карточка шарахнулась — кошка-тревожа вздрагивает вместе с ней.
-    cat.react('startle');
+    deck.cat.react('startle');
   }
 
   if (supportsHover && !prefersReducedMotion) {
@@ -87,7 +118,7 @@ function createCard(option: FormatOption, index: number, cat: PixelCat): HTMLBut
   }
 
   button.addEventListener('click', () => {
-    if (dodged) {
+    if (dodged || prefersReducedMotion) {
       play('iriska');
       selectFormat(option.label);
     } else {

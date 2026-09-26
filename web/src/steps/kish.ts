@@ -1,7 +1,8 @@
 // Шаг 1 — выбор даты.
 
-import { steps, dateOptions, customDateCopy, kishCopy } from '../content';
-import { selectDate } from '../state';
+import { steps, dateOptions, customDateCopy, kishCopy, backCopy } from '../content';
+import { getState, selectDate } from '../state';
+import { renderBackButton } from '../back';
 import { renderPixelCat } from '../pixelcats';
 import { play } from '../audio';
 import './kish.css';
@@ -10,7 +11,7 @@ export function render(container: HTMLElement): void {
   const section = document.createElement('section');
   section.className = 'kish';
 
-  section.append(renderSleepingKish());
+  section.append(renderBackButton(backCopy.kish), renderSleepingKish());
 
   const heading = document.createElement('h1');
   heading.className = 'kish__heading';
@@ -31,6 +32,11 @@ export function render(container: HTMLElement): void {
     button.className = 'kish__date';
     button.textContent = option.label;
     button.style.setProperty('--breathe-delay', `${index * 0.6}s`);
+    // Дата, выбранная раньше, — если вернулись с экрана Ириски.
+    if (option.label === getState().date) {
+      button.classList.add('kish__date--current');
+      button.setAttribute('aria-current', 'true');
+    }
     button.addEventListener('click', () =>
       selectDate(option.label, resolveNextOccurrence(option.day, option.month)),
     );
@@ -86,11 +92,19 @@ function renderCustomDate(delayIndex: number): HTMLElement {
   input.className = 'kish__custom-input';
   input.required = true;
 
+  // Раньше выбрали свою дату — она уже стоит в поле.
+  const { date, dateISO } = getState();
+  const isCustom = date !== undefined && !dateOptions.some((o) => o.label === date);
+  if (isCustom && dateISO) {
+    input.value = dateISO;
+    trigger.classList.add('kish__date--current');
+  }
+
   const submit = document.createElement('button');
   submit.type = 'submit';
   submit.className = 'kish__custom-submit';
   submit.textContent = customDateCopy.submit;
-  submit.disabled = true;
+  submit.disabled = input.value === '';
 
   input.addEventListener('input', () => {
     submit.disabled = input.value === '';

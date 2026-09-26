@@ -53,6 +53,11 @@
   animation-delay: var(--breathe-delay, 0s);
 }
 
+/* Дата, выбранная раньше, — если вернулись с экрана Ириски. */
+.kish__date--current {
+  border-color: var(--accent);
+}
+
 @media (hover: hover) {
   .kish__date:hover {
     border-color: var(--accent);
@@ -93,12 +98,21 @@
   cursor: default;
 }
 
+/* Дыхание: карточка заметно вздымается, а по контуру разгорается
+   и гаснет золото. Контур — через box-shadow, чтобы не спорить
+   с рамкой выбранной даты и hover. */
 @keyframes kish-breathe {
   0%,
   100% {
     transform: scale(1);
+    box-shadow:
+      0 0 0 1px transparent,
+      0 0 0 transparent;
   }
   50% {
-    transform: scale(1.01);
+    transform: scale(1.05);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--accent) 70%, transparent),
+      0 0 22px color-mix(in srgb, var(--accent) 25%, transparent);
   }
 }

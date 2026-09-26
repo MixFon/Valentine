@@ -1,5 +1,5 @@
 // Единая аудио-подсистема: один AudioContext на весь сайт, тумблер
-// mute в sessionStorage, разблокировка звука по первому тапу — iOS
+// mute в sessionStorage, разблокировка звука по тапу — iOS
 // Safari не даёт играть звук до жеста пользователя. Файлы — .m4a
 // (AAC): Safari не декодирует Ogg/Vorbis, поэтому не .ogg.
 
@@ -26,7 +26,6 @@ const ICON = `
 `;
 
 let ctx: AudioContext | null = null;
-let unlocking: Promise<void> | null = null;
 const buffers = new Map<CatId, AudioBuffer>();
 
 function isMuted(): boolean {
@@ -37,34 +36,49 @@ function setMuted(muted: boolean): void {
   sessionStorage.setItem(MUTE_KEY, muted ? '1' : '0');
 }
 
-async function unlock(): Promise<void> {
-  if (unlocking) return unlocking;
-
-  unlocking = (async () => {
+// iOS Safari разрешает звук только по жесту, который засчитывается на
+// отпускании пальца (touchend/click), а не на pointerdown. Кроме того,
+// iOS сама приостанавливает контекст, когда вкладка уходит в фон или
+// гаснет экран. Поэтому будим контекст на каждом касании, пока он не
+// заработает, а не один раз.
+function wake(): void {
+  if (!ctx) {
     ctx = new AudioContext();
-    if (ctx.state === 'suspended') await ctx.resume();
+    void loadBuffers(ctx);
+  }
+  if (ctx.state !== 'running') {
+    ctx.resume().catch(() => {
+      // Жест не засчитался — попробуем на следующем касании.
+    });
+  }
+}
 
-    await Promise.all(
-      (Object.keys(SOURCES) as CatId[]).map(async (cat) => {
-        try {
-          const response = await fetch(SOURCES[cat]);
-          const data = await response.arrayBuffer();
-          buffers.set(cat, await ctx!.decodeAudioData(data));
-        } catch {
-          // Один кот остался без звука — не мешаем остальным.
-        }
-      }),
-    );
-  })();
+let loading: Promise<void> | null = null;
 
-  return unlocking;
+function loadBuffers(context: AudioContext): Promise<void> {
+  loading ??= Promise.all(
+    (Object.keys(SOURCES) as CatId[]).map(async (cat) => {
+      try {
+        const response = await fetch(SOURCES[cat]);
+        const data = await response.arrayBuffer();
+        buffers.set(cat, await context.decodeAudioData(data));
+      } catch {
+        // Один кот остался без звука — не мешаем остальным.
+      }
+    }),
+  ).then(() => undefined);
+  return loading;
 }
 
 export function play(cat: CatId): void {
-  if (isMuted() || !ctx) return;
+  if (isMuted()) return;
+
+  // play() всегда вызывается из тапа — это законный момент разбудить
+  // контекст, если iOS успела его приостановить.
+  wake();
 
   const buffer = buffers.get(cat);
-  if (!buffer) return;
+  if (!ctx || !buffer) return;
 
   const source = ctx.createBufferSource();
   source.buffer = buffer;
@@ -72,11 +86,19 @@ export function play(cat: CatId): void {
   source.start();
 }
 
+// Звук — часть задумки, поэтому просим Safari (iOS 17+) играть его и при
+// включённом беззвучном режиме. Где API нет, ничего не меняется.
+interface AudioSessionNavigator extends Navigator {
+  audioSession?: { type: string };
+}
+
 export function initAudio(): void {
-  document.addEventListener('pointerdown', () => void unlock(), {
-    once: true,
-    passive: true,
-  });
+  const session = (navigator as AudioSessionNavigator).audioSession;
+  if (session) session.type = 'playback';
+
+  for (const type of ['touchend', 'click'] as const) {
+    document.addEventListener(type, wake, { capture: true, passive: true });
+  }
 
   mountMuteToggle();
 }

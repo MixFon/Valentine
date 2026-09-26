@@ -89,6 +89,18 @@ export function selectFormat(format: string): void {
   goTo('chips');
 }
 
+// Шаг назад. С титров — к билету, со старта — некуда.
+export function goBack(): void {
+  const index = STEPS.indexOf(state.step);
+  if (index > 0) goTo(STEPS[index - 1]);
+}
+
+// «Изменить ответ»: экран Чипса снова показывает билет и кнопку отправки.
+export function unconfirm(): void {
+  state = { ...state, confirmed: false };
+  persist();
+}
+
 export function markConfirmed(): void {
   state = { ...state, confirmed: true };
   persist();

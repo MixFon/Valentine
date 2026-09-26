@@ -52,6 +52,11 @@
   transition: transform var(--dur) cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+/* Формат, выбранный раньше: карточка залита своим пятном окраса. */
+.iriska__card--current {
+  background: color-mix(in srgb, var(--card-accent, var(--accent)) 18%, var(--surface));
+}
+
 .iriska__card--dodged {
   transform: translate(var(--dodge-x, 0px), var(--dodge-y, 0px))
     rotate(var(--dodge-rot, 0deg));
