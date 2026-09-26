@@ -7,6 +7,7 @@
 import { steps, chipsCopy } from '../content';
 import { getState } from '../state';
 import { play } from '../audio';
+import { renderPhoto } from '../photos';
 import './chips.css';
 
 export function render(container: HTMLElement): void {
@@ -72,7 +73,9 @@ function renderPending(
       });
   });
 
-  section.append(step, heading, body, ticket, error, confirm);
+  const photo = renderPhoto('chips', 'chips__photo');
+
+  section.append(step, heading, body, photo, ticket, error, confirm);
 }
 
 function renderConfirmed(

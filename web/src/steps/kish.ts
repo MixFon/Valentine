@@ -2,11 +2,14 @@
 
 import { steps, dateOptions, customDateCopy } from '../content';
 import { selectDate } from '../state';
+import { renderPhoto } from '../photos';
 import './kish.css';
 
 export function render(container: HTMLElement): void {
   const section = document.createElement('section');
   section.className = 'kish';
+
+  section.append(renderPhoto('kish', 'kish__photo'));
 
   const step = document.createElement('p');
   step.className = 'kish__step';

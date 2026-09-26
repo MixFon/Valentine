@@ -72,6 +72,13 @@ export const chipsCopy = {
   calendarButton: 'Добавить в календарь',
 };
 
+// Черновики — автор может переписать.
+export const photoAlt: Record<CatId, string> = {
+  kish: 'Киш лежит на лежанке и смотрит одним глазом.',
+  iriska: 'Ириска свернулась на пледе и следит за тобой.',
+  chips: 'Чипс сидит на кровати и поднял лапу.',
+};
+
 export const audioCopy = {
   muteLabel: 'Выключить звук',
   unmuteLabel: 'Включить звук',

@@ -8,6 +8,7 @@
 import { steps, formatOptions, type FormatOption } from '../content';
 import { selectFormat } from '../state';
 import { play } from '../audio';
+import { renderPhoto } from '../photos';
 import './iriska.css';
 
 const ACCENT_VARS = ['--accent', '--accent-2', '--accent-3'];
@@ -19,17 +20,26 @@ export function render(container: HTMLElement): void {
   const step = document.createElement('p');
   step.className = 'iriska__step';
   step.textContent = '2';
-  section.append(step);
 
   const heading = document.createElement('h1');
   heading.className = 'iriska__heading';
   heading.textContent = steps.iriska.heading;
-  section.append(heading);
+
+  // Подзаголовок слева, фото справа: рядом с заголовком длинные слова
+  // не помещаются, а сверху справа живёт тумблер звука. Так фото почти
+  // не добавляет высоты экрану, где и без него шесть карточек.
+  const intro = document.createElement('div');
+  intro.className = 'iriska__intro';
 
   const body = document.createElement('p');
   body.className = 'iriska__body';
   body.textContent = steps.iriska.body;
-  section.append(body);
+
+  const photo = renderPhoto('iriska', 'iriska__photo');
+  photo.style.setProperty('--tilt', `${(Math.random() * 3 - 1.5).toFixed(2)}deg`);
+
+  intro.append(body, photo);
+  section.append(step, heading, intro);
 
   const list = document.createElement('div');
   list.className = 'iriska__cards';

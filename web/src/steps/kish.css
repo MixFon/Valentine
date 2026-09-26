@@ -5,6 +5,25 @@
   padding: 2rem 1.25rem;
 }
 
+/* Фото неподвижно и без hover. Нижний край растворяется в фон,
+   чтобы светлые обои на снимке не резали тёмный экран. В маске
+   важна только альфа, цвет var(--ink) роли не играет. */
+.kish__photo {
+  display: block;
+}
+
+.kish__photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 22dvh;
+  object-fit: cover;
+  object-position: 60% 50%;
+  border-radius: var(--radius);
+  -webkit-mask-image: linear-gradient(to bottom, var(--ink) 55%, transparent);
+  mask-image: linear-gradient(to bottom, var(--ink) 55%, transparent);
+}
+
 .kish__step {
   margin: 0;
   color: var(--accent);

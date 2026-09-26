@@ -6,6 +6,7 @@ import type { CatId } from './content';
 import { render as renderKish } from './steps/kish';
 import { render as renderIriska } from './steps/iriska';
 import { render as renderChips } from './steps/chips';
+import { preload } from './photos';
 
 const STEPS: CatId[] = ['kish', 'iriska', 'chips'];
 const STORAGE_KEY = 'valentine:state';
@@ -51,6 +52,9 @@ function renderCurrentStep(): void {
 
   app.replaceChildren();
   renderers[state.step](app);
+
+  const next = STEPS[STEPS.indexOf(state.step) + 1];
+  if (next) preload(next);
 }
 
 export function goTo(step: CatId): void {

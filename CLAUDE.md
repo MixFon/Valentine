@@ -120,8 +120,8 @@ deploy.sh, Makefile, Caddyfile.snippet, valentine.service
 
 Одна пара шрифтов на весь сайт. Коты различаются цветом, скоростью и формой, но не гарнитурой — иначе получится ярмарка.
 
-- Заголовки: Unbounded или Cormorant Infant.
-- Текст: Golos Text.
+- Заголовки: Unbounded 600 (выбран вместо Cormorant Infant, см. `DECISIONS.md`).
+- Текст: Golos Text 400.
 
 Только локальные `woff2` с `font-display: swap`. Длина строки до 70 символов.
 

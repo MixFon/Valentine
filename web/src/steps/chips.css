@@ -22,6 +22,20 @@
   max-width: 32ch;
 }
 
+.chips__photo {
+  display: block;
+  width: 9rem;
+  align-self: center;
+}
+
+.chips__photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  box-shadow: 0 12px 24px color-mix(in srgb, var(--ink) 18%, transparent);
+}
+
 .chips__ticket {
   border-radius: var(--radius);
   overflow: hidden;

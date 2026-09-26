@@ -5,6 +5,29 @@
   padding: 2rem 1.25rem;
 }
 
+.iriska__intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* Наклон — тот же случайный ±1.5°, что у карточек. Фото не шарахается:
+   отскок остаётся механикой только карточек. */
+.iriska__photo {
+  flex: none;
+  display: block;
+  width: 6rem;
+  transform: rotate(var(--tilt, 0deg));
+}
+
+.iriska__photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+
 .iriska__step {
   margin: 0;
   color: var(--accent);
