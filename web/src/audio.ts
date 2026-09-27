@@ -1,14 +1,14 @@
 // Единая аудио-подсистема: один AudioContext на весь сайт, тумблер
 // mute в sessionStorage, разблокировка звука по тапу — iOS
 // Safari не даёт играть звук до жеста пользователя. Файлы — .m4a
-// (AAC): Safari не декодирует Ogg/Vorbis, поэтому не .ogg.
+// (AAC) или .mp3: Safari не декодирует Ogg/Vorbis, поэтому не .ogg.
 
 import type { CatId } from './content';
 import { audioCopy } from './content';
 import './audio.css';
 
 const SOURCES: Record<CatId, string> = {
-  kish: new URL('../assets/audio/kish.m4a', import.meta.url).href,
+  kish: new URL('../assets/audio/kish.mp3', import.meta.url).href,
   iriska: new URL('../assets/audio/iriska.m4a', import.meta.url).href,
   chips: new URL('../assets/audio/chips.m4a', import.meta.url).href,
 };
@@ -70,6 +70,20 @@ function loadBuffers(context: AudioContext): Promise<void> {
   return loading;
 }
 
+// Звуки длинные (до 15 с), а экраны сменяются быстрее. Играет только
+// один: новый звук обрывает предыдущий.
+let current: AudioBufferSourceNode | null = null;
+
+export function stop(): void {
+  if (!current) return;
+  try {
+    current.stop();
+  } catch {
+    // Уже закончился сам.
+  }
+  current = null;
+}
+
 export function play(cat: CatId): void {
   if (isMuted()) return;
 
@@ -80,10 +94,15 @@ export function play(cat: CatId): void {
   const buffer = buffers.get(cat);
   if (!ctx || !buffer) return;
 
+  stop();
   const source = ctx.createBufferSource();
   source.buffer = buffer;
   source.connect(ctx.destination);
+  source.onended = () => {
+    if (current === source) current = null;
+  };
   source.start();
+  current = source;
 }
 
 // Звук — часть задумки, поэтому просим Safari (iOS 17+) играть его и при
@@ -117,6 +136,8 @@ function mountMuteToggle(): void {
 
   button.addEventListener('click', () => {
     setMuted(!isMuted());
+    // Выключили — звучащее замолкает сразу, а не доигрывает.
+    if (isMuted()) stop();
     refresh();
   });
 

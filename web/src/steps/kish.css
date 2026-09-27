@@ -72,6 +72,17 @@
   background: var(--surface);
 }
 
+/* Кнопка своей даты живёт в обёртке вместе с формой и без этого
+   сжималась по тексту, а не тянулась, как остальные карточки. */
+.kish__date--custom {
+  width: 100%;
+}
+
+/* display: flex выше перебивает атрибут hidden — форма была видна сразу. */
+.kish__custom-form[hidden] {
+  display: none;
+}
+
 .kish__custom-input {
   flex: 1;
   min-width: 0;

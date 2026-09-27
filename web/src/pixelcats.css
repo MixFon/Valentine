@@ -23,6 +23,9 @@
 .px-O { fill: var(--px-chips-ginger); }
 .px-W { fill: var(--px-chips-white); }
 .px-a { fill: var(--px-chips-eye); }
-.px-H { fill: var(--px-hand); }
-.px-h { fill: var(--px-hand-fold); }
+.px-s { fill: var(--px-chips-stripe); }
+.px-D { fill: var(--px-chips-pad); }
+.px-F { fill: var(--px-floor); }
 .px-Q { fill: var(--px-heart); }
+/* Пятно окраса на значке формата — задаёт карточка (iriska.ts). */
+.px-A { fill: var(--icon-fill, var(--accent)); }

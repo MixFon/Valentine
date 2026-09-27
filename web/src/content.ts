@@ -44,9 +44,9 @@ export interface DateOption {
 }
 
 export const dateOptions: DateOption[] = [
-  { id: 'feb-14', label: '14 февраля', day: 14, month: 2 },
-  { id: 'feb-23', label: '23 февраля', day: 23, month: 2 },
-  { id: 'mar-8', label: '8 марта', day: 8, month: 3 },
+  { id: 'oct-2', label: '2 октября', day: 2, month: 10 },
+  { id: 'oct-9', label: '9 октября', day: 9, month: 10 },
+  { id: 'oct-10', label: '10 октября', day: 10, month: 10 },
 ];
 
 // Своя дата — обязательный четвёртый вариант, если ни один из
@@ -57,25 +57,80 @@ export const customDateCopy = {
   submit: 'Выбрать',
 };
 
+export type FormatIcon =
+  | 'dinner'
+  | 'movie'
+  | 'park'
+  | 'pottery'
+  | 'cabin'
+  | 'planetarium'
+  | 'custom';
+
 export interface FormatOption {
   id: string;
+  // Уходит на сервер и печатается на билете Чипса.
   label: string;
+  // Реплика Ириски в облачке, когда карточку тронули: почему её не
+  // устроил и этот вариант.
+  worry: string;
+  icon: FormatIcon;
 }
 
+// Черновик, собранный вместе с автором: конкретные осенние варианты
+// вместо общих категорий. Автор может переписать любую строку.
 export const formatOptions: FormatOption[] = [
-  { id: 'dinner', label: 'ужин' },
-  { id: 'movie', label: 'кино' },
-  { id: 'walk', label: 'прогулка' },
-  { id: 'masterclass', label: 'мастеркласс' },
-  { id: 'nature', label: 'выезд на природу' },
-  { id: 'cabin', label: 'выезд в домик' },
+  {
+    id: 'dinner',
+    label: 'ужин там, куда давно собирались',
+    worry: '«А вдруг там громко и все смотрят?»',
+    icon: 'dinner',
+  },
+  {
+    id: 'movie',
+    label: 'ночной сеанс в кино',
+    worry: '«Темно. И кто-то хрустит.»',
+    icon: 'movie',
+  },
+  {
+    id: 'park',
+    label: 'осенний парк с термосом какао',
+    worry: '«Листья шуршат. Подозрительно.»',
+    icon: 'park',
+  },
+  {
+    id: 'pottery',
+    label: 'гончарный мастер-класс на двоих',
+    worry: '«Глина. Липкая. Нет.»',
+    icon: 'pottery',
+  },
+  {
+    id: 'cabin',
+    label: 'домик с камином и баней',
+    worry: '«Огонь?! Ну, если только издалека.»',
+    icon: 'cabin',
+  },
+  {
+    id: 'planetarium',
+    label: 'планетарий',
+    worry: '«Там же космос. Он огромный.»',
+    icon: 'planetarium',
+  },
 ];
+
+// Свой вариант — как «Указать самой» у Киша: карточка открывает поле.
+export const customFormatCopy = {
+  cardLabel: 'свой вариант',
+  worry: '«Вдруг ты придумаешь то, что меня устроит?»',
+  inputLabel: 'Свой вариант',
+  placeholder: 'например, первый каток сезона',
+  submit: 'Выбрать',
+};
 
 export const chipsCopy = {
   confirmButton: 'Договориться',
   sending: 'Договариваюсь…',
   error: 'Не получилось отправить. Попробуй ещё раз.',
-  confirmedHeading: 'Чипс уже сел на руки и никого не отпускает.',
+  confirmedHeading: 'Чипс замурчал. Это его подпись.',
   confirmedBody: 'Значит, договорились.',
   calendarButton: 'Добавить в календарь',
   creditsButton: 'В разработке участвовали',

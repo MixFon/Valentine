@@ -77,7 +77,7 @@ function renderPending(
       });
   });
 
-  const cat = renderPixelCat('chipsHands');
+  const cat = renderPixelCat('chipsFloor');
   cat.el.classList.add('chips__cat');
 
   section.append(renderBackButton(backCopy.chips), heading, body, cat.el, ticket, error, confirm);
@@ -99,7 +99,7 @@ function renderConfirmed(
   body.textContent = chipsCopy.confirmedBody;
 
   // Договорились — над Чипсом появляется сердечко.
-  const cat = renderPixelCat('chipsHands', 'happy');
+  const cat = renderPixelCat('chipsFloor', 'happy');
   cat.el.classList.add('chips__cat');
 
   section.append(heading, body, cat.el);

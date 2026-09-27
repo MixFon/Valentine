@@ -10,6 +10,7 @@ import { render as renderIriska } from './steps/iriska';
 import { render as renderChips } from './steps/chips';
 import { render as renderCredits } from './steps/credits';
 import { preload } from './photos';
+import { play, stop } from './audio';
 
 // Старт и титры — не коты: у них нет своего звука и своей палитры кота.
 type Step = 'intro' | CatId | 'credits';
@@ -71,10 +72,23 @@ function renderCurrentStep(): void {
   if (STEPS[STEPS.indexOf(state.step) + 1] === 'credits') CATS.forEach(preload);
 }
 
+// Звук экрана: Ириска воркует, когда открывается её экран, Чипс мурчит
+// на билете (и ещё раз после отправки — см. chips.ts). goTo вызывается
+// только из тапов, поэтому звук не заиграет сам при загрузке страницы.
+// Уход с экрана обрывает его звук.
+const STEP_SOUNDS: Partial<Record<Step, CatId>> = {
+  iriska: 'iriska',
+  chips: 'chips',
+};
+
 export function goTo(step: Step): void {
   state = { ...state, step };
   persist();
   renderCurrentStep();
+
+  stop();
+  const sound = STEP_SOUNDS[step];
+  if (sound) play(sound);
 }
 
 export function selectDate(date: string, dateISO?: string): void {

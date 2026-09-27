@@ -25,11 +25,21 @@
   --px-iriska-eye: #9bb04a;
   --px-chips-ginger: #e08a3c;
   --px-chips-white: #fffbf5;
-  --px-chips-eye: #e0a030;
+  --px-chips-eye: #8db04a;
+  --px-chips-stripe: #c8742e;
+  --px-chips-pad: #2b1d15;
   --px-zzz: #8c7a6a;
-  --px-hand: #efc7a8;
-  --px-hand-fold: #c99a7a;
+  --px-floor: #efdcc8;
   --px-heart: #d9534a;
+
+  /* Черепаховый окрас Ириски — фон её экрана. Живут в :root, а не в
+     [data-cat='iriska'], чтобы пятна плавно гасли при уходе с экрана,
+     а не пропадали вместе с переменными. */
+  --tortie-black: #231a16;
+  --tortie-brown: #5a3524;
+  --tortie-red: #b8612a;
+  --tortie-ginger: #d88a4a;
+  --tortie-cream: #ecc594;
 }
 
 /* Стартовый экран: нейтральный тёплый фон, на котором одинаково

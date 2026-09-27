@@ -1,3 +1,76 @@
+/*
+ * Черепаховый окрас на весь экран: крупные пятна чёрного, рыжего и
+ * кремового, как шерсть Ириски. Отдельный неподвижный слой под
+ * контентом (background-attachment: fixed на iPhone не работает).
+ * Градиенты не умеют плавно переключаться, поэтому слой проявляется
+ * и гаснет прозрачностью — синхронно со сменой палитры.
+ */
+body::before {
+  content: '';
+  position: fixed;
+  /* Слой больше экрана и повёрнут: пятна ложатся по диагонали, как
+     шерсть, а не ровными овалами. По ширине запас больше: повёрнутый
+     слой должен закрыть углы и вытянутого экрана (до 390×1100), а
+     ширина ему нужна ≈ W·cos24° + H·sin24°. */
+  inset: -30% -60%;
+  transform: rotate(-24deg);
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dur-slow);
+  background:
+    radial-gradient(2.6% 2.1% at 53.1% 26.4%, var(--tortie-cream) 72%, transparent 76%),
+    radial-gradient(2.1% 1.8% at 54.9% 27.7%, var(--tortie-cream) 72%, transparent 76%),
+    radial-gradient(1.5% 1.4% at 51.8% 28%, var(--tortie-cream) 72%, transparent 76%),
+    radial-gradient(2.1% 1.8% at 38.3% 56.2%, var(--tortie-cream) 72%, transparent 76%),
+    radial-gradient(1.5% 1.4% at 39.6% 57.4%, var(--tortie-cream) 72%, transparent 76%),
+    radial-gradient(1.8% 1.4% at 36.9% 57.8%, var(--tortie-cream) 72%, transparent 76%),
+    radial-gradient(2.1% 1.4% at 64.4% 43.8%, var(--tortie-ginger) 72%, transparent 76%),
+    radial-gradient(1.5% 1.4% at 65.8% 45%, var(--tortie-ginger) 72%, transparent 76%),
+    radial-gradient(2.1% 1.8% at 45.5% 73.6%, var(--tortie-red) 72%, transparent 76%),
+    radial-gradient(1.5% 1.4% at 46.9% 72.3%, var(--tortie-red) 72%, transparent 76%),
+    radial-gradient(8.3% 4.3% at 32.8% 24%, var(--tortie-cream) 72%, transparent 76%),
+    radial-gradient(5.2% 3.6% at 36.5% 25.8%, var(--tortie-cream) 72%, transparent 76%),
+    radial-gradient(4.7% 2.9% at 30.1% 26.4%, var(--tortie-cream) 72%, transparent 76%),
+    radial-gradient(9.3% 5% at 61.7% 25.2%, var(--tortie-red) 72%, transparent 76%),
+    radial-gradient(5.2% 3.6% at 58.1% 27.7%, var(--tortie-red) 72%, transparent 76%),
+    radial-gradient(4.7% 2.9% at 65.3% 28.3%, var(--tortie-red) 72%, transparent 76%),
+    radial-gradient(7.3% 5.7% at 70.3% 42.6%, var(--tortie-cream) 72%, transparent 76%),
+    radial-gradient(4.7% 3.6% at 67.2% 45.7%, var(--tortie-cream) 72%, transparent 76%),
+    radial-gradient(10.4% 4.3% at 42.8% 36.4%, var(--tortie-ginger) 72%, transparent 76%),
+    radial-gradient(6.3% 3.6% at 39.2% 38.2%, var(--tortie-ginger) 72%, transparent 76%),
+    radial-gradient(5.2% 2.9% at 47.3% 38.2%, var(--tortie-ginger) 72%, transparent 76%),
+    radial-gradient(8.3% 6.4% at 30.1% 46.3%, var(--tortie-red) 72%, transparent 76%),
+    radial-gradient(5.2% 4.3% at 33.8% 49.4%, var(--tortie-red) 72%, transparent 76%),
+    radial-gradient(11.4% 5% at 55.4% 53.7%, var(--tortie-brown) 72%, transparent 76%),
+    radial-gradient(7.3% 4.3% at 50.9% 55.6%, var(--tortie-brown) 72%, transparent 76%),
+    radial-gradient(6.3% 3.6% at 59.9% 56.2%, var(--tortie-brown) 72%, transparent 76%),
+    radial-gradient(8.3% 5% at 41% 67.4%, var(--tortie-red) 72%, transparent 76%),
+    radial-gradient(5.2% 3.6% at 37.3% 69.2%, var(--tortie-red) 72%, transparent 76%),
+    radial-gradient(4.7% 3.6% at 44.6% 69.8%, var(--tortie-red) 72%, transparent 76%),
+    radial-gradient(9.3% 5.7% at 65.3% 77.3%, var(--tortie-cream) 72%, transparent 76%),
+    radial-gradient(5.7% 4.3% at 61.7% 74.8%, var(--tortie-cream) 72%, transparent 76%),
+    radial-gradient(9.3% 4.3% at 32% 79.1%, var(--tortie-ginger) 72%, transparent 76%),
+    radial-gradient(5.2% 3.6% at 35.6% 77.3%, var(--tortie-ginger) 72%, transparent 76%),
+    radial-gradient(14.5% 7.8% at 59% 36.4%, var(--tortie-brown) 72%, transparent 76%),
+    radial-gradient(9.3% 6.4% at 53.6% 39.5%, var(--tortie-brown) 72%, transparent 76%),
+    radial-gradient(8.3% 5.7% at 64.4% 39.5%, var(--tortie-brown) 72%, transparent 76%),
+    radial-gradient(6.3% 4.3% at 57.2% 31.4%, var(--tortie-brown) 72%, transparent 76%),
+    radial-gradient(13.5% 7.1% at 45.5% 59.9%, var(--tortie-brown) 72%, transparent 76%),
+    radial-gradient(8.3% 5.7% at 40.1% 62.4%, var(--tortie-brown) 72%, transparent 76%),
+    radial-gradient(7.3% 5% at 50.9% 62.4%, var(--tortie-brown) 72%, transparent 76%),
+    radial-gradient(6.3% 4.3% at 47.3% 55%, var(--tortie-brown) 72%, transparent 76%),
+    radial-gradient(9.3% 5.7% at 36.5% 31.4%, var(--tortie-brown) 72%, transparent 76%),
+    radial-gradient(6.3% 4.3% at 32.8% 33.9%, var(--tortie-brown) 72%, transparent 76%),
+    radial-gradient(8.3% 5% at 68% 62.4%, var(--tortie-brown) 72%, transparent 76%),
+    radial-gradient(5.2% 4.3% at 64.4% 64.9%, var(--tortie-brown) 72%, transparent 76%),
+    var(--tortie-black);
+}
+
+[data-cat='iriska']::before {
+  opacity: 1;
+}
+
 .iriska {
   display: flex;
   flex-direction: column;
@@ -5,11 +78,98 @@
   padding: 2rem 1.25rem;
 }
 
+/* Плашки под текстом: на чёрных пятнах тёмный текст иначе теряет
+   контраст. Цвет — --surface с лёгкой прозрачностью, окрас просвечивает. */
+.iriska .back,
+.iriska__heading,
+.iriska__intro {
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+}
+
+.iriska .back {
+  margin: -0.75rem 0 -0.5rem;
+  padding: 0 0.75rem;
+  opacity: 1;
+}
+
+/* Плашка с подзаголовком и Ириской: пиксельная кошка на черепаховом
+   фоне иначе растворилась бы в пятнах. */
 .iriska__intro {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  padding: 0.75rem 1rem;
+}
+
+/* Плашка с Ириской прилипает к верху экрана: облачко должно быть видно,
+   даже когда тапаешь нижние карточки. Прилипает ниже тумблера звука
+   (он fixed в правом верхнем углу, 1rem + 2.75rem), иначе Ириска
+   оказалась бы под ним. Фон сплошной — карточки проезжают под плашкой. */
+.iriska__intro {
+  position: sticky;
+  top: calc(env(safe-area-inset-top) + 4.25rem);
+  z-index: 2;
+  background: var(--surface);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--ink) 35%, transparent);
+}
+
+/* Комиксовое облачко с хвостиком в сторону Ириски. */
+.iriska__bubble {
+  position: relative;
+  flex: 1;
+  margin: 0 0.75rem 0 0;
+  padding: 0.625rem 0.875rem;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  transform-origin: 100% 50%;
+}
+
+.iriska__bubble[hidden],
+.iriska__body[hidden] {
+  display: none;
+}
+
+.iriska__bubble::before,
+.iriska__bubble::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  border-style: solid;
+  border-color: transparent;
+}
+
+.iriska__bubble::before {
+  right: -14px;
+  margin-top: -8px;
+  border-width: 8px 0 8px 13px;
+  border-left-color: var(--ink);
+}
+
+.iriska__bubble::after {
+  right: -10px;
+  margin-top: -6px;
+  border-width: 6px 0 6px 10px;
+  border-left-color: var(--surface);
+}
+
+/* Всплывает с пружинкой в темпе Ириски. */
+.iriska__bubble--pop {
+  animation: iriska-bubble-pop var(--dur) cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes iriska-bubble-pop {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* Ириска без наклона: пиксель-арт под углом теряет чёткие края. */
@@ -18,10 +178,10 @@
   flex: none;
 }
 
-/* Заголовок — первый на экране, справа над ним кружок звука. */
 .iriska__heading {
+  align-self: flex-start;
   margin: 0;
-  padding-right: 3rem;
+  padding: 0.5rem 1rem;
   font-size: 1.5rem;
   line-height: 1.3;
 }
@@ -40,7 +200,11 @@
 }
 
 .iriska__card {
-  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  width: 100%;
+  padding: 0.875rem 1.25rem 0.875rem 1rem;
   border: 2px solid var(--card-accent, var(--accent));
   border-radius: var(--radius);
   background: var(--surface);
@@ -50,6 +214,58 @@
   cursor: pointer;
   transform: rotate(var(--tilt, 0deg));
   transition: transform var(--dur) cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* display: flex выше перебил бы атрибут hidden у «своего варианта». */
+.iriska__card[hidden],
+.iriska__custom-form[hidden] {
+  display: none;
+}
+
+.format-icon {
+  --px: 3px;
+  flex: none;
+}
+
+.iriska__card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.iriska__custom-form {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border: 2px solid var(--card-accent, var(--accent));
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.iriska__custom-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.25rem 0;
+  border: none;
+  border-bottom: 2px solid var(--accent);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+}
+
+.iriska__custom-submit {
+  padding: 0.25rem 0.875rem;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--surface);
+  font: inherit;
+  cursor: pointer;
+}
+
+.iriska__custom-submit:disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 
 /* Формат, выбранный раньше: карточка залита своим пятном окраса. */
